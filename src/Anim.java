@@ -1,4 +1,4 @@
-
+package Example1;
 
 
 
@@ -30,7 +30,7 @@ public class Anim extends JFrame {
         glcanvas.addGLEventListener(listener);
         glcanvas.addKeyListener(listener);
 //        glcanvas.addMouseListener(this);
-//        glcanvas.addMouseListener(listener);
+        glcanvas.addMouseListener(listener);
 //        glcanvas.addMouseMotionListener(listener);
 //        glcanvas.addMouseMotionListener(this);
         getContentPane().add(glcanvas, BorderLayout.CENTER);
