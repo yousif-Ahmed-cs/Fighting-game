@@ -83,7 +83,7 @@ public class AnimGLEventListener4 extends AnimListener implements MouseListener 
     public void DrawMenu(GL gl) {
         // رسم خلفية القائمة (back2.png - Index 7)
         gl.glEnable(GL.GL_BLEND);
-        gl.glBindTexture(GL.GL_TEXTURE_2D, textures[7]);
+        gl.glBindTexture(GL.GL_TEXTURE_2D, textures[5]);
         gl.glPushMatrix();
         gl.glBegin(GL.GL_QUADS);
         gl.glTexCoord2f(0.0f, 0.0f); gl.glVertex3f(0.0f, 0.0f, -1.0f);
