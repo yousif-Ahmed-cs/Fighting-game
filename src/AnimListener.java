@@ -1,4 +1,3 @@
-
 import java.awt.event.KeyListener;
 import javax.media.opengl.GLEventListener;
 
