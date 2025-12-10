@@ -8,6 +8,7 @@ import javax.media.opengl.glu.GLU;
 
 // 1. أضفنا implements MouseListener لنتمكن من استخدام الفأرة
 public class AnimGLEventListener4 extends AnimListener implements MouseListener {
+    SoundManager soundManager = new SoundManager();
 
     int animationIndex = 0;
     int framecounter = 0;
@@ -60,6 +61,7 @@ public class AnimGLEventListener4 extends AnimListener implements MouseListener 
                 e.printStackTrace();
             }
         }
+        soundManager.playBackgroundMusic("assets//menuMusic.wav");
     }
 
     public void display(GLAutoDrawable gld) {
@@ -213,9 +215,13 @@ public class AnimGLEventListener4 extends AnimListener implements MouseListener 
             // فحص إذا كان الضغط داخل حدود الزر
             // الزر مركزه (400, 400) وعرضه 200 وطوله 100
             // إذن حدوده من X: 300->500 و Y: 350->450
-            if(mouseX > 0 && mouseX < 500 && mouseY > 0 && mouseY < 450){
-                isPlaying = true; // ابدأ اللعبة
+            if (mouseX > 0 && mouseX < 500 && mouseY > 0 && mouseY < 450) {
+                soundManager.playSound("assets//buttonClick.wav"); // صوت الضغطة
+                soundManager.stopBackgroundMusic(); // أوقف موسيقى القائمة
+                soundManager.playBackgroundMusic("assets//gameMusic.wav"); // شغل موسيقى اللعبة
+                isPlaying = true;
             }
+
         }
     }
 
