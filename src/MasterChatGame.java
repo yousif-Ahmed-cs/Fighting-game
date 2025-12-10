@@ -224,6 +224,7 @@ public class MasterChatGame extends JFrame {
     }
 
     private JButton createStyledButton(String text) {
+
         JButton button = new JButton(text);
         button.setPreferredSize(new Dimension(200, 50));
         button.setFont(new Font("Arial", Font.BOLD, 16));
@@ -261,12 +262,19 @@ public class MasterChatGame extends JFrame {
         } catch (Exception e) {
             System.out.println("Sound error: " + e.getMessage());
         }
-
+        if (level == 1) {
+            initializeOpenGLGame(10);
+        }
+        if (level == 2) {
+            initializeOpenGLGame(6);
+        }
+        if (level == 3) {
+            initializeOpenGLGame(2);
+        }
         // شغل اللعبة بـ OpenGL
-        initializeOpenGLGame();
     }
 
-    private void initializeOpenGLGame() {
+    private void initializeOpenGLGame(int level) {
         try {
             System.out.println("Initializing OpenGL Game...");
 
@@ -278,7 +286,7 @@ public class MasterChatGame extends JFrame {
             glCanvas.setPreferredSize(new Dimension(800, 800));
 
             // اعمل instance من AnimGLEventListener4
-            gameRenderer = new AnimGLEventListener4();
+            gameRenderer = new AnimGLEventListener4( level,!isMultiplayer);
 
             System.out.println("Game renderer created");
 
@@ -293,6 +301,7 @@ public class MasterChatGame extends JFrame {
                 public void keyPressed(KeyEvent e) {
                     if (e.getKeyCode() == KeyEvent.VK_ESCAPE) {
                         System.out.println("ESC pressed - returning to menu");
+
                         returnToMenu();
                     }
                 }
