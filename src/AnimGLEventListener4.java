@@ -10,6 +10,12 @@ import Texture.Texture;
 
 public class AnimGLEventListener4 extends AnimListener implements MouseListener {
 
+    public AnimGLEventListener4(boolean aiEnabled , int aiThinkDelay) {
+        this.aiEnabled = aiEnabled;
+        this.currentLevelIndex = aiThinkDelay-2;
+        this.aiThinkDelay = aiThinkDelay;
+    }
+
     // Add these AI variables with other class variables
     private boolean aiEnabled = true;  // Set to false for 2-player mode
     private int aiThinkTimer = 0;
@@ -111,7 +117,7 @@ public class AnimGLEventListener4 extends AnimListener implements MouseListener 
         }
 
         // CREATE PLAYERS FIRST (this was missing or in wrong order)
-        player = new Player(x, y, 16, 40, 5.0f);
+        player = new Player(x, y, 16, 40, 6.0f);
         player2 = new Player(x2, y2, 20, 40, 6.0f);
 
         // Store ground levels AFTER creating players
@@ -166,9 +172,9 @@ public class AnimGLEventListener4 extends AnimListener implements MouseListener 
 
     private void drawBackground(GL gl) {
         // التأكد من أن الفهرس الحالي صالح وأن القائمة ليست فارغة
-        if (backgroundsList.isEmpty() || currentLevelIndex < 0 || currentLevelIndex >= backgroundsList.size()) {
-            return;
-        }
+//        if (backgroundsList.isEmpty() || currentLevelIndex < 0 || currentLevelIndex >= backgroundsList.size()) {
+//            return;
+//        }
 
         // الحصول على كائن Texture الحالي من القائمة
         Texture currentBackground = backgroundsList.get(currentLevelIndex);
@@ -519,7 +525,7 @@ public class AnimGLEventListener4 extends AnimListener implements MouseListener 
         updateAI();
 
         // Check if B is pressed for Player 1 fighting
-        if (isKeyPressed(KeyEvent.VK_B)) {
+        if (isKeyPressed(KeyEvent.VK_SLASH)) {
             if (!isFighting && !isJumping) {
                 isFighting = true;
                 fightFrameCounter = 0;
@@ -530,7 +536,7 @@ public class AnimGLEventListener4 extends AnimListener implements MouseListener 
         // Player 2 controls ONLY work if AI is disabled
         if (!aiEnabled) {
             // Check if P is pressed for Player 2 fighting
-            if (isKeyPressed(KeyEvent.VK_P)) {
+            if (isKeyPressed(KeyEvent.VK_C)) {
                 if (!isFighting2 && !isJumping2) {
                     isFighting2 = true;
                     fightFrameCounter2 = 0;
@@ -563,12 +569,12 @@ public class AnimGLEventListener4 extends AnimListener implements MouseListener 
                 }
             }
 
-            if (isKeyPressed(KeyEvent.VK_S)) {
-                if (player2.getY() > player2.getHeight() / 2) {
-                    player2.move(0, -moveSpeed);
-                    moving2 = true;
-                }
-            }
+//            if (isKeyPressed(KeyEvent.VK_S)) {
+//                if (player2.getY() > player2.getHeight() / 2) {
+//                    player2.move(0, -moveSpeed);
+//                    moving2 = true;
+//                }
+//            }
         }
 
         // Check if UP arrow is pressed for Player 1 jumping
@@ -662,12 +668,12 @@ public class AnimGLEventListener4 extends AnimListener implements MouseListener 
             }
         }
 
-        if (isKeyPressed(KeyEvent.VK_DOWN)) {
-            if (player.getY() > player.getHeight() / 2) {
-                player.move(0, -moveSpeed);
-                moving = true;
-            }
-        }
+//        if (isKeyPressed(KeyEvent.VK_DOWN)) {
+//            if (player.getY() > player.getHeight() / 2) {
+//                player.move(0, -moveSpeed);
+//                moving = true;
+//            }
+//        }
 
         // Update walking animation for Player 1 (only if not fighting or jumping)
         if (!isFighting && !isJumping && moving) {
