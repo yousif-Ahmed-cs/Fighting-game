@@ -1,5 +1,6 @@
 import Texture.Texture;
-import javax.media.opengl.GL;
+//import javax.media.opengl.GL;
+import javax.media.opengl.*;
 import java.util.ArrayList;
 import java.util.List;
 

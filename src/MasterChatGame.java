@@ -72,7 +72,7 @@ public class MasterChatGame extends JFrame {
         gbc.gridx = 0;
         gbc.fill = GridBagConstraints.HORIZONTAL;
 
-        JLabel titleLabel = new JLabel("MasterChat", SwingConstants.CENTER);
+        JLabel titleLabel = new JLabel("Fighting", SwingConstants.CENTER);
         titleLabel.setFont(new Font("Arial", Font.BOLD, 36));
         titleLabel.setForeground(Color.WHITE);
 
@@ -81,6 +81,8 @@ public class MasterChatGame extends JFrame {
 
         JButton infoBtn = createStyledButton("Info");
         infoBtn.addActionListener(e -> showScreen("INFO"));
+        JButton HighScoreBt1= createStyledButton("HightScore");
+        infoBtn.addActionListener(e -> showScreen("HightScore"));
 
         JButton exitBtn = createStyledButton("Exit");
         exitBtn.addActionListener(e -> System.exit(0));
@@ -263,10 +265,10 @@ public class MasterChatGame extends JFrame {
         }
 
         // شغل اللعبة بـ OpenGL
-        initializeOpenGLGame();
+        initializeOpenGLGame(level);
     }
 
-    private void initializeOpenGLGame() {
+    private void initializeOpenGLGame(int level) {
         try {
             System.out.println("Initializing OpenGL Game...");
 
