@@ -9,11 +9,12 @@ import java.util.List;
 import Texture.Texture;
 
 public class AnimGLEventListener4 extends AnimListener implements MouseListener {
-
-    public AnimGLEventListener4(boolean aiEnabled , int aiThinkDelay) {
+    private MasterChatGame2 mainGame;
+    public AnimGLEventListener4(MasterChatGame2 mainGame,boolean aiEnabled , int aiThinkDelay) {
         this.aiEnabled = aiEnabled;
         this.currentLevelIndex = aiThinkDelay-2;
         this.aiThinkDelay = aiThinkDelay;
+        this.mainGame=mainGame;
     }
 
     // Add these AI variables with other class variables
@@ -44,6 +45,7 @@ public class AnimGLEventListener4 extends AnimListener implements MouseListener 
     private boolean gameOver = false;
     private String winner = "";
 
+    private Texture timesUpTexture;
     private Texture gameOverBoxTexture;
     private Texture player1WinsTexture;
     private Texture player2WinsTexture;
@@ -105,6 +107,7 @@ public class AnimGLEventListener4 extends AnimListener implements MouseListener 
         gl.glEnable(GL.GL_TEXTURE_2D);
         gl.glBlendFunc(GL.GL_SRC_ALPHA, GL.GL_ONE_MINUS_SRC_ALPHA);
         gl.glEnable(GL.GL_BLEND);
+        timesUpTexture = textureManager.getTexture(gl, "timesup.png");
         gameOverBoxTexture=textureManager.getTexture(gl, "gameover.png");
         player1WinsTexture = textureManager.getTexture(gl, "player1wins.png");
         player2WinsTexture = textureManager.getTexture(gl, "player2wins.png");
@@ -169,6 +172,22 @@ public class AnimGLEventListener4 extends AnimListener implements MouseListener 
         }
         // ... (بقية منطق القائمة/الخلفية هنا إذا كنت تستخدمه)
     }
+    public void endGameByTimeUp() {
+        if (!gameOver) {
+            this.gameOver = true;
+            // عند انتهاء الوقت، يفوز اللاعب صاحب الصحة الأعلى
+            if (player1Health > player2Health) {
+                this.winner = "Player 1 Wins!";
+                mainGame.recordWin("Player 1");
+            } else if (player2Health > player1Health) {
+                this.winner = "Player 2 Wins!";
+                mainGame.recordWin("Player 2");
+            } else {
+                this.winner = "Draw!"; // لا يتم تسجيل نتيجة في حالة التعادل
+            }
+        }
+    }
+
 
     private void drawBackground(GL gl) {
         // التأكد من أن الفهرس الحالي صالح وأن القائمة ليست فارغة
@@ -204,7 +223,7 @@ public class AnimGLEventListener4 extends AnimListener implements MouseListener 
         float healthBarWidth = 200;
         float healthBarHeight = 30;
         float healthBarX = 20;
-        float healthBarY = 20;
+        float healthBarY = 50;
 
         // Background (Red - represents lost health)
         gl.glColor3f(0.8f, 0.2f, 0.2f); // Dark red
@@ -303,6 +322,7 @@ public class AnimGLEventListener4 extends AnimListener implements MouseListener 
                 if (player2Health <= 0) {
                     gameOver = true;
                     winner = "Player 1 Wins!";
+                    mainGame.recordWin("Player 1");
                     System.out.println(winner);
                 }
             }
@@ -327,6 +347,7 @@ public class AnimGLEventListener4 extends AnimListener implements MouseListener 
                 if (player1Health <= 0) {
                     gameOver = true;
                     winner = "Player 2 Wins!";
+                    mainGame.recordWin("Player 2");
                     System.out.println(winner);
                 }
             }
@@ -365,12 +386,19 @@ public class AnimGLEventListener4 extends AnimListener implements MouseListener 
         float boxHeight = 250;
         float boxX = (maxWidth - boxWidth) / 2;
         float boxY = (maxHeight - boxHeight) / 2;
-
+        Texture messageTexture;
+        if (winner.equals("Player 1 Wins!")) {
+            messageTexture = player1WinsTexture;
+        } else if (winner.equals("Player 2 Wins!")) {
+            messageTexture = player2WinsTexture;
+        } else { // هذا سيشمل حالة "Time's Up!"
+            messageTexture = timesUpTexture;
+        }
         // Determine which winner image to show
-        Texture winnerTexture = winner.equals("Player 1 Wins!") ? player1WinsTexture : player2WinsTexture;
+//        Texture winnerTexture = winner.equals("Player 1 Wins!") ? player1WinsTexture : player2WinsTexture;
 
-        if (winnerTexture != null) {
-            gl.glBindTexture(GL.GL_TEXTURE_2D, winnerTexture.getId());
+        if (messageTexture != null) {
+            gl.glBindTexture(GL.GL_TEXTURE_2D, messageTexture.getId());
 
             gl.glBegin(GL.GL_QUADS);
             gl.glTexCoord2f(0.0f, 0.0f);
@@ -525,7 +553,7 @@ public class AnimGLEventListener4 extends AnimListener implements MouseListener 
         updateAI();
 
         // Check if B is pressed for Player 1 fighting
-        if (isKeyPressed(KeyEvent.VK_SLASH)) {
+        if (isKeyPressed(KeyEvent.VK_L)) {
             if (!isFighting && !isJumping) {
                 isFighting = true;
                 fightFrameCounter = 0;
@@ -569,12 +597,7 @@ public class AnimGLEventListener4 extends AnimListener implements MouseListener 
                 }
             }
 
-//            if (isKeyPressed(KeyEvent.VK_S)) {
-//                if (player2.getY() > player2.getHeight() / 2) {
-//                    player2.move(0, -moveSpeed);
-//                    moving2 = true;
-//                }
-//            }
+
         }
 
         // Check if UP arrow is pressed for Player 1 jumping
@@ -668,12 +691,7 @@ public class AnimGLEventListener4 extends AnimListener implements MouseListener 
             }
         }
 
-//        if (isKeyPressed(KeyEvent.VK_DOWN)) {
-//            if (player.getY() > player.getHeight() / 2) {
-//                player.move(0, -moveSpeed);
-//                moving = true;
-//            }
-//        }
+
 
         // Update walking animation for Player 1 (only if not fighting or jumping)
         if (!isFighting && !isJumping && moving) {
